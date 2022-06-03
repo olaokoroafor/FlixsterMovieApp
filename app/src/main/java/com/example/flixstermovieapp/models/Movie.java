@@ -17,7 +17,7 @@ public class Movie {
     String backdropPath;
     Double voteAverage;
     Integer id;
-    Boolean has_video;
+    public String videoUrl;
 
     public Movie(){}
 
@@ -28,7 +28,6 @@ public class Movie {
         backdropPath = jsonObject.getString("backdrop_path");
         voteAverage = jsonObject.getDouble("vote_average");
         id = jsonObject.getInt("id");
-        has_video = jsonObject.getBoolean("video");
     }
 
     public Double getVoteAverage() {
@@ -58,10 +57,6 @@ public class Movie {
 
     public Integer getId() {
         return id;
-    }
-
-    public Boolean getHas_video() {
-        return has_video;
     }
 
     public String getOverview() {

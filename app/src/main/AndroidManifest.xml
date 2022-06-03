@@ -20,6 +20,9 @@
             android:name=".MovieDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".MovieTrailerActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

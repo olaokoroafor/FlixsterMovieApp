@@ -23,7 +23,7 @@ import java.util.List;
 import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e2881a633aacd8d5007ae4052213043";
+    public final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e2881a633aacd8d5007ae4052213043";// + this.getString(R.string.movie_db_key);
     public static final String TAG = "MainActivity";
     private  ActivityMainBinding binding;
     List<Movie> movies;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         //set a layoutmanager on the recycler view
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
-
+        Log.i(TAG, NOW_PLAYING_URL);
 
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure");
+                Log.d(TAG, "onFailure" + response + statusCode);
             }
         });
     }

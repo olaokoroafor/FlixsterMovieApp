@@ -1,10 +1,13 @@
 package com.example.flixstermovieapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import okhttp3.Headers;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private ActivityMovieDetailsBinding binding;
+    public static final String TAG = "MovieDetailActivity";
     // the movie to display
     Movie movie;
 
@@ -34,11 +38,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     RatingBar rbVoteAverage;
     ImageView ivActivityPoster;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMovieDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         // resolve the view objects
         tvTitle = (TextView) binding.tvTitle;//findViewById(R.id.tvTitle);
         tvOverview = (TextView) binding.tvOverview;//findViewById(R.id.tvOverview);
@@ -49,33 +55,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
 
-        // set the title and overview
-        tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
-        Glide.with(this)
-                .load(movie.getPosterPath())
-                .placeholder(R.drawable.flicks_movie_placeholder)
-                .centerCrop()
-                .into(ivActivityPoster);
-
-        // vote average is 0..10, convert to 0..5 by dividing by 2
-        float voteAverage = movie.getVoteAverage().floatValue();
-        rbVoteAverage.setRating(voteAverage / 2.0f);
-
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(NOW_PLAYING_URL, new JsonHttpResponseHandler() {
+        client.get( "https://api.themoviedb.org/3/movie/" + movie.getId() + "/videos?api_key=1e2881a633aacd8d5007ae4052213043", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "onSuccess");
 
                 JSONObject jsonObject = json.jsonObject;
                 try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results:" + results.toString());
-                    //important to say add all instead of pointing to new object
-                    movies.addAll(Movie.fromJsonArray(results));
-                    movieAdapter.notifyDataSetChanged();
-                    Log.i(TAG, "Results Length:" + movies.size());
+                    JSONObject video_stuff = jsonObject.getJSONArray("results").getJSONObject(0);
+                    Log.i(TAG, "Results:" + video_stuff.toString());
+                    movie.videoUrl = video_stuff.getString("key");
+                    Log.i(TAG, "video url:" + movie.videoUrl);
                 } catch (JSONException e) {
                     Log.e(TAG, "hit json exception", e);
                     e.printStackTrace();
@@ -85,8 +76,39 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure");
+                Log.d(TAG, "onFailure" + response + statusCode);
             }
         });
+
+        // set the title and overview
+        tvTitle.setText(movie.getTitle());
+        tvOverview.setText(movie.getOverview());
+        Glide.with(this)
+                .load(movie.getPosterPath())
+                .placeholder(R.drawable.flicks_movie_placeholder)
+                .centerCrop()
+                .into(ivActivityPoster);
+
+        ivActivityPoster.setClickable(true);
+        ivActivityPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create intent for the new activity
+                Intent intent = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
+                // serialize the movie using parceler, use its short name as a key
+                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                // show the activity
+                MovieDetailsActivity.this.startActivity(intent);
+
+            }
+        });
+
+        // vote average is 0..10, convert to 0..5 by dividing by 2
+        float voteAverage = movie.getVoteAverage().floatValue();
+        rbVoteAverage.setRating(voteAverage / 2.0f);
+
+
+
+
     }
 }
