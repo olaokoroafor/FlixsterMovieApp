@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.bumptech.glide.load.engine.Resource;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.flixstermovieapp.adapters.MovieAdapter;
@@ -23,7 +25,7 @@ import java.util.List;
 import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
-    public final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e2881a633aacd8d5007ae4052213043";// + this.getString(R.string.movie_db_key);
+    public String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=1e2881a633aacd8d5007ae4052213043";
     public static final String TAG = "MainActivity";
     private  ActivityMainBinding binding;
     List<Movie> movies;
