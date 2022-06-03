@@ -30,8 +30,8 @@
 
     <TextView
         android:id="@+id/tvOverview"
-        android:layout_width="370dp"
-        android:layout_height="122dp"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"

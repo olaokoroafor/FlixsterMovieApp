@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="0dp">
+    android:layout_margin="4dp">
 
     <ImageView
         android:id="@+id/ivPoster"
@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="279dp"
-        android:layout_height="wrap_content"
+        android:layout_width="248dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:textSize="24sp"
@@ -30,14 +30,15 @@
 
     <TextView
         android:id="@+id/tvOverview"
-        android:layout_width="267dp"
-        android:layout_height="72dp"
+        android:layout_width="246dp"
+        android:layout_height="175dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toEndOf="@+id/ivPoster"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintVertical_bias="1.0"
         tools:text=". They soon encounter an array of old and new beasts as they clash with Grindelwald's growing legion of followers." />
 </androidx.constraintlayout.widget.ConstraintLayout>
